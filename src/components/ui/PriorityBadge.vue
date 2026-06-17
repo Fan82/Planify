@@ -1,8 +1,8 @@
 <script setup>
 const labels = {
-  high: "高優先",
-  medium: "中優先",
-  low: "低優先",
+  high: "High",
+  medium: "Medium",
+  low: "Low",
 };
 
 defineProps({

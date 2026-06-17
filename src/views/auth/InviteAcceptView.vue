@@ -1,7 +1,7 @@
 <template>
   <section class="auth-page">
-    <h1>接受邀請</h1>
-    <p>邀請流程會在後端邀請資料表與寄信功能完成後啟用。</p>
-    <RouterLink class="btn btn-primary" to="/">回到工作台</RouterLink>
+    <h1>Accept invitation</h1>
+    <p>Invitation links will activate after backend email delivery is connected.</p>
+    <RouterLink class="btn btn-primary" to="/">Back to workspace</RouterLink>
   </section>
 </template>

@@ -9,18 +9,11 @@ defineProps({
     <div class="field-label">Activity</div>
     <p v-if="!task">Select a task to view updates.</p>
     <div v-else class="activity-list">
-      <div class="activity-item">
-        <span class="avatar mini">JL</span>
+      <div v-for="(item, index) in task.activity || []" :key="`${task.id}-${index}`" class="activity-item">
+        <span class="avatar mini">{{ index === 0 ? 'FY' : 'JL' }}</span>
         <div>
-          <div class="activity-text"><strong>James</strong> moved this task</div>
-          <div class="activity-time">2h ago</div>
-        </div>
-      </div>
-      <div class="activity-item">
-        <span class="avatar mini">FY</span>
-        <div>
-          <div class="activity-text"><strong>Fan</strong> assigned {{ task.assignee }}</div>
-          <div class="activity-time">Yesterday</div>
+          <div class="activity-text">{{ item }}</div>
+          <div class="activity-time">{{ index === 0 ? 'Just now' : 'Earlier' }}</div>
         </div>
       </div>
     </div>

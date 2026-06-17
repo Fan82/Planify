@@ -1,7 +1,7 @@
 <template>
   <section class="auth-page">
-    <h1>登入</h1>
-    <p>前端 MVP 先以假資料運作；接上 Supabase 後會啟用登入流程。</p>
-    <RouterLink class="btn btn-primary" to="/">回到工作台</RouterLink>
+    <h1>Log in</h1>
+    <p>The demo runs with local workspace data. Connect Supabase to enable account login.</p>
+    <RouterLink class="btn btn-primary" to="/">Back to workspace</RouterLink>
   </section>
 </template>

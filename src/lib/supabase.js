@@ -1,22 +1,35 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+let _client = null;
 
-function createMissingClient() {
-  return new Proxy(
-    {},
-    {
-      get() {
-        throw new Error(
-          "Missing Supabase env vars. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.local before using backend features.",
-        );
-      },
-    },
-  );
+export function getSupabase() {
+  if (_client) return _client;
+
+  const url = import.meta.env.VITE_SUPABASE_URL;
+  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  if (!url || !key) return null;
+
+  _client = createClient(url, key);
+  return _client;
 }
 
-export const supabase =
-  supabaseUrl && supabaseKey
-    ? createClient(supabaseUrl, supabaseKey)
-    : createMissingClient();
+// Export for direct imports; callers should handle null in demo mode.
+export const supabase = new Proxy(
+  {},
+  {
+    get(_, prop) {
+      const client = getSupabase();
+      if (!client) {
+        console.warn(
+          `Supabase not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.local`,
+        );
+        return () => ({
+          data: null,
+          error: { message: "Supabase not configured" },
+        });
+      }
+      return client[prop];
+    },
+  },
+);

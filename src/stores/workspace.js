@@ -5,8 +5,8 @@ import { useAuthStore } from "./auth";
 
 export const useWorkspaceStore = defineStore("workspace", () => {
   // ─── State ───────────────────────────────────────────────
-  const list = ref([]); // 用戶所屬的所有 workspaces
-  const current = ref(null); // 當前選中的 workspace
+  const list = ref([]); // Workspaces the current user belongs to
+  const current = ref(null); // Currently selected workspace
   const loading = ref(false);
   const error = ref(null);
 
@@ -16,8 +16,8 @@ export const useWorkspaceStore = defineStore("workspace", () => {
   // ─── Actions ─────────────────────────────────────────────
 
   /**
-   * 拉取用戶所有 workspaces
-   * 透過 workspace_members join workspaces
+   * Fetch all workspaces for the current user
+   * Join workspace_members with workspaces
    */
   async function fetchAll() {
     const auth = useAuthStore();
@@ -48,20 +48,20 @@ export const useWorkspaceStore = defineStore("workspace", () => {
       return;
     }
 
-    // 攤平結構：[{ role, workspace }] → [{ ...workspace, myRole }]
+    // Flatten rows into workspace objects with myRole.
     list.value = data.map((row) => ({
       ...row.workspace,
       myRole: row.role,
     }));
 
-    // 預設選第一個（或從 localStorage 恢復）
+    // Default to the saved workspace or the first item.
     const savedId = localStorage.getItem("planify:workspace-id");
     const saved = list.value.find((w) => w.id === savedId);
     current.value = saved ?? list.value[0] ?? null;
   }
 
   /**
-   * 切換 workspace
+   * Switch workspace
    * @param {string} id
    */
   function switchTo(id) {
@@ -69,11 +69,11 @@ export const useWorkspaceStore = defineStore("workspace", () => {
     if (!found) return;
     current.value = found;
     localStorage.setItem("planify:workspace-id", id);
-    // 其他 store（tasks、members）在各自 watch currentId 後重新 fetch
+    // Other stores can refetch after watching currentId.
   }
 
   /**
-   * 建立新 workspace，並把自己設為 owner
+   * Create a workspace and add the current user as owner
    * @param {string} name
    */
   async function createWorkspace(name) {
@@ -87,7 +87,7 @@ export const useWorkspaceStore = defineStore("workspace", () => {
       .replace(/\s+/g, "-")
       .replace(/[^a-z0-9-]/g, "");
 
-    // 1. 建 workspace
+    // 1. Create workspace
     const { data: ws, error: wsErr } = await supabase
       .from("workspaces")
       .insert({ name, slug })
@@ -99,7 +99,7 @@ export const useWorkspaceStore = defineStore("workspace", () => {
       return { success: false };
     }
 
-    // 2. 把自己加進 workspace_members 成 owner
+    // 2. Add self as workspace owner
     const { error: memErr } = await supabase.from("workspace_members").insert({
       workspace_id: ws.id,
       user_id: auth.user.id,
@@ -111,7 +111,7 @@ export const useWorkspaceStore = defineStore("workspace", () => {
       return { success: false };
     }
 
-    // 3. 更新本地 list，並切換到新 workspace
+    // 3. Update local list and switch to the new workspace
     const newWorkspace = { ...ws, myRole: "owner" };
     list.value.push(newWorkspace);
     switchTo(ws.id);

@@ -6,11 +6,18 @@ defineProps({
   task: { type: Object, required: true },
 });
 
-defineEmits(["open"]);
+defineEmits(["open", "drag-start"]);
 </script>
 
 <template>
-  <button class="task-card" type="button" @click="$emit('open', task.id)">
+  <button
+    class="task-card"
+    :class="{ 'is-done': task.status === 'done' }"
+    type="button"
+    draggable="true"
+    @click="$emit('open', task.id)"
+    @dragstart="$emit('drag-start', task.id)"
+  >
     <h3 class="task-title">{{ task.title }}</h3>
     <div class="task-meta">
       <PriorityBadge :priority="task.priority" />

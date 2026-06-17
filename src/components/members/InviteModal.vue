@@ -1,3 +1,52 @@
+<script setup>
+import { reactive, ref } from "vue";
+import BaseButton from "@/components/ui/BaseButton.vue";
+import BaseInput from "@/components/ui/BaseInput.vue";
+import BaseModal from "@/components/ui/BaseModal.vue";
+import BaseSelect from "@/components/ui/BaseSelect.vue";
+import { useMembersStore } from "@/stores/members";
+
+const props = defineProps({
+  open: { type: Boolean, default: false },
+});
+
+const emit = defineEmits(["close", "invited"]);
+const members = useMembersStore();
+const error = ref("");
+const form = reactive({
+  email: "",
+  role: "member",
+});
+
+const roles = [
+  { id: "admin", label: "admin" },
+  { id: "member", label: "member" },
+];
+
+async function submitInvite() {
+  const result = await members.invite(form.email, form.role);
+  if (!result.success) {
+    error.value = members.error || "Unable to invite member.";
+    return;
+  }
+  error.value = "";
+  form.email = "";
+  form.role = "member";
+  emit("invited", result.member);
+  emit("close");
+}
+</script>
+
 <template>
-  <div class="empty-state">邀請成員功能會在後端接上後啟用。</div>
+  <BaseModal :open="props.open" title="Invite member" @close="$emit('close')">
+    <form class="task-form" @submit.prevent="submitInvite">
+      <BaseInput id="invite-modal-email" v-model="form.email" label="Email" type="email" />
+      <BaseSelect id="invite-modal-role" v-model="form.role" label="Role" :options="roles" />
+      <p v-if="error" class="form-error">{{ error }}</p>
+      <div class="form-actions">
+        <BaseButton variant="ghost" @click="$emit('close')">Cancel</BaseButton>
+        <BaseButton type="submit">Invite</BaseButton>
+      </div>
+    </form>
+  </BaseModal>
 </template>

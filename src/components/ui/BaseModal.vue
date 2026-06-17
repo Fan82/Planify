@@ -12,7 +12,7 @@ defineEmits(["close"]);
     <section class="modal">
       <header>
         <h2>{{ title }}</h2>
-        <button type="button" class="icon-button" aria-label="關閉" @click="$emit('close')">
+        <button type="button" class="icon-button" aria-label="Close" @click="$emit('close')">
           x
         </button>
       </header>

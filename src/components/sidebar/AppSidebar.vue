@@ -5,9 +5,9 @@ import WorkspaceSwitcher from "./WorkspaceSwitcher.vue";
 
 const navItems = [
   { to: "/board", label: "Board", count: 9 },
-  { to: "/my-tasks", label: "My Tasks", count: 3 },
+  { to: "/my-tasks", label: "Today", count: 3 },
   { to: "/calendar", label: "Calendar" },
-  { to: "/", label: "Overview" },
+  { to: "/overview", label: "Overview" },
   { to: "/settings", label: "Settings" },
 ];
 </script>
@@ -15,7 +15,7 @@ const navItems = [
 <template>
   <aside class="app-sidebar">
     <WorkspaceSwitcher />
-    <nav class="sidebar-nav" aria-label="主要導覽">
+    <nav class="sidebar-nav" aria-label="Main navigation">
       <RouterLink v-for="item in navItems" :key="item.to" :to="item.to">
         <span>{{ item.label }}</span>
         <span v-if="item.count" class="nav-count">{{ item.count }}</span>

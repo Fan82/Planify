@@ -1,7 +1,7 @@
 <template>
   <section class="auth-page">
-    <h1>建立帳號</h1>
-    <p>帳號流程會在 Supabase schema 完成後接上。</p>
-    <RouterLink class="btn btn-primary" to="/">回到工作台</RouterLink>
+    <h1>Create account</h1>
+    <p>Account creation will be enabled after the Supabase schema is connected.</p>
+    <RouterLink class="btn btn-primary" to="/">Back to workspace</RouterLink>
   </section>
 </template>

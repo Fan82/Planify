@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import { loadPersisted, persistRef } from "@/utils/persistence";
 
 const today = new Date();
 const isoAfter = (days) => {
@@ -21,8 +22,10 @@ export const PRIORITIES = [
   { id: "low", label: "Low" },
 ];
 
+export const CURRENT_USER = "Fan (You)";
+
 export const useTasksStore = defineStore("tasks", () => {
-  const tasks = ref([
+  const defaultTasks = [
     {
       id: "task-1",
       title: "Landing page - hero section redesign",
@@ -33,6 +36,7 @@ export const useTasksStore = defineStore("tasks", () => {
       assignee: "Fan (You)",
       tag: "Design",
       dueDate: isoAfter(4),
+      activity: ["Fan created this task", "James moved this to In Progress"],
     },
     {
       id: "task-2",
@@ -44,6 +48,7 @@ export const useTasksStore = defineStore("tasks", () => {
       assignee: "Fan (You)",
       tag: "Strategy",
       dueDate: isoAfter(8),
+      activity: ["Fan created this task"],
     },
     {
       id: "task-3",
@@ -55,6 +60,7 @@ export const useTasksStore = defineStore("tasks", () => {
       assignee: "James L.",
       tag: "Engineering",
       dueDate: isoAfter(6),
+      activity: ["James picked this up"],
     },
     {
       id: "task-4",
@@ -66,6 +72,7 @@ export const useTasksStore = defineStore("tasks", () => {
       assignee: "Sara R.",
       tag: "Marketing",
       dueDate: isoAfter(9),
+      activity: ["Sara added campaign notes"],
     },
     {
       id: "task-5",
@@ -77,6 +84,7 @@ export const useTasksStore = defineStore("tasks", () => {
       assignee: "Mike K.",
       tag: "Design",
       dueDate: isoAfter(2),
+      activity: ["Mike requested review"],
     },
     {
       id: "task-6",
@@ -88,6 +96,7 @@ export const useTasksStore = defineStore("tasks", () => {
       assignee: "Mike K.",
       tag: "Research",
       dueDate: isoAfter(12),
+      activity: ["Fan created this task"],
     },
     {
       id: "task-7",
@@ -99,6 +108,7 @@ export const useTasksStore = defineStore("tasks", () => {
       assignee: "James L.",
       tag: "Docs",
       dueDate: isoAfter(3),
+      activity: ["James sent docs for review"],
     },
     {
       id: "task-8",
@@ -110,6 +120,7 @@ export const useTasksStore = defineStore("tasks", () => {
       assignee: "Sara R.",
       tag: "Content",
       dueDate: isoAfter(15),
+      activity: ["Sara created outline"],
     },
     {
       id: "task-9",
@@ -121,10 +132,19 @@ export const useTasksStore = defineStore("tasks", () => {
       assignee: "Sara R.",
       tag: "Research",
       dueDate: isoAfter(-2),
+      activity: ["Sara completed interviews", "Fan marked this done"],
     },
-  ]);
+  ];
 
-  const selectedTaskId = ref(null);
+  const tasks = ref(loadPersisted("planify:tasks", defaultTasks));
+  const selectedTaskId = ref(loadPersisted("planify:selected-task-id", "task-1"));
+
+  if (!tasks.value.some((task) => task.id === selectedTaskId.value)) {
+    selectedTaskId.value = tasks.value[0]?.id ?? null;
+  }
+
+  persistRef("planify:tasks", tasks);
+  persistRef("planify:selected-task-id", selectedTaskId);
   const selectedTask = computed(() =>
     tasks.value.find((task) => task.id === selectedTaskId.value),
   );
@@ -135,12 +155,15 @@ export const useTasksStore = defineStore("tasks", () => {
   const completedTasks = computed(() =>
     tasks.value.filter((task) => task.status === "done"),
   );
+  const myTasks = computed(() =>
+    tasks.value.filter((task) => task.assignee === CURRENT_USER),
+  );
   const highPriorityTasks = computed(() =>
     tasks.value.filter((task) => task.priority === "high" && task.status !== "done"),
   );
   const dueSoonTasks = computed(() => {
     const limit = new Date(today);
-    limit.setDate(today.getDate() + 3);
+    limit.setDate(today.getDate() + 7);
     return tasks.value.filter((task) => {
       const dueDate = new Date(task.dueDate);
       return task.status !== "done" && dueDate <= limit;
@@ -154,30 +177,118 @@ export const useTasksStore = defineStore("tasks", () => {
     })),
   );
 
+  function addActivity(task, message) {
+    task.activity = [message, ...(task.activity || [])].slice(0, 8);
+  }
+
   function createTask(payload) {
     const task = {
       id: crypto.randomUUID(),
       title: payload.title.trim(),
-      description: payload.description?.trim() || "尚未補充說明。",
+      description: payload.description?.trim() || "No description yet.",
       status: payload.status || "todo",
       priority: payload.priority || "medium",
       projectId: payload.projectId || "project-product",
-      assignee: payload.assignee?.trim() || "Fan (You)",
+      assignee: payload.assignee?.trim() || CURRENT_USER,
       tag: payload.tag?.trim() || "General",
       dueDate: payload.dueDate || isoAfter(3),
+      activity: [`${CURRENT_USER} created this task`],
     };
     tasks.value.unshift(task);
+    selectedTaskId.value = task.id;
     return task;
+  }
+
+  function createGoalPlan(payload) {
+    const goal = payload.title.trim();
+    if (!goal) return [];
+
+    const dueDate = payload.dueDate || isoAfter(7);
+    const baseTask = {
+      priority: payload.priority || "medium",
+      projectId: payload.projectId || "project-product",
+      assignee: payload.assignee?.trim() || CURRENT_USER,
+      dueDate,
+      tag: "Goal",
+    };
+
+    const created = [
+      {
+        ...baseTask,
+        id: crypto.randomUUID(),
+        title: `Define success criteria: ${goal}`,
+        description: payload.description?.trim() || `Clarify the target outcome for ${goal}.`,
+        status: "todo",
+        activity: [`${CURRENT_USER} created this goal plan`],
+      },
+      {
+        ...baseTask,
+        id: crypto.randomUUID(),
+        title: `Plan first milestone: ${goal}`,
+        description: "Break the goal into the first concrete milestone and owner.",
+        status: "todo",
+        activity: [`${CURRENT_USER} created this goal plan`],
+      },
+      {
+        ...baseTask,
+        id: crypto.randomUUID(),
+        title: `Execute next action: ${goal}`,
+        description: "Start the highest-leverage action that moves this goal forward.",
+        status: "doing",
+        activity: [`${CURRENT_USER} created this goal plan`],
+      },
+      {
+        ...baseTask,
+        id: crypto.randomUUID(),
+        title: `Review progress: ${goal}`,
+        description: "Check progress, blockers, and the next adjustment.",
+        status: "review",
+        activity: [`${CURRENT_USER} created this goal plan`],
+      },
+    ];
+
+    tasks.value.unshift(...created);
+    selectedTaskId.value = created[0].id;
+    return created;
   }
 
   function updateTask(taskId, patch) {
     const task = tasks.value.find((item) => item.id === taskId);
-    if (!task) return;
+    if (!task) return null;
     Object.assign(task, patch);
+    addActivity(task, `${CURRENT_USER} updated this task`);
+    return task;
   }
 
   function moveTask(taskId, status) {
-    updateTask(taskId, { status });
+    const task = tasks.value.find((item) => item.id === taskId);
+    if (!task || task.status === status) return;
+    task.status = status;
+    addActivity(task, `${CURRENT_USER} moved this to ${TASK_STATUSES.find((item) => item.id === status)?.label || status}`);
+  }
+
+  function deleteTask(taskId) {
+    const index = tasks.value.findIndex((task) => task.id === taskId);
+    if (index === -1) return;
+    tasks.value.splice(index, 1);
+    if (selectedTaskId.value === taskId) {
+      selectedTaskId.value = tasks.value[index]?.id ?? tasks.value[index - 1]?.id ?? null;
+    }
+  }
+
+  function duplicateTask(taskId) {
+    const source = tasks.value.find((task) => task.id === taskId);
+    if (!source) return null;
+    const clone = {
+      ...source,
+      id: crypto.randomUUID(),
+      title: `${source.title} copy`,
+      status: "todo",
+      activity: [`${CURRENT_USER} duplicated this task`],
+    };
+    tasks.value.unshift(clone);
+    selectedTaskId.value = clone.id;
+    return clone;
   }
 
   function selectTask(taskId) {
@@ -190,12 +301,16 @@ export const useTasksStore = defineStore("tasks", () => {
     selectedTask,
     openTasks,
     completedTasks,
+    myTasks,
     highPriorityTasks,
     dueSoonTasks,
     tasksByStatus,
     createTask,
+    createGoalPlan,
     updateTask,
     moveTask,
+    deleteTask,
+    duplicateTask,
     selectTask,
   };
 });

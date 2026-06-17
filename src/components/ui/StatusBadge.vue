@@ -1,9 +1,9 @@
 <script setup>
 const labels = {
-  todo: "待辦",
-  doing: "進行中",
-  review: "審核",
-  done: "完成",
+  todo: "Backlog",
+  doing: "In Progress",
+  review: "In Review",
+  done: "Done",
 };
 
 defineProps({
