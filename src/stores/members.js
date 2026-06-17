@@ -2,14 +2,49 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { loadPersisted, persistRef } from "@/utils/persistence";
 
-const AVATAR_COLORS = ["#534ab7", "#0f6e56", "#993c1d", "#185fa5", "#3b6d11", "#854f0b"];
+const AVATAR_COLORS = [
+  "#FFAE00",
+  "#0f6e56",
+  "#993c1d",
+  "#185fa5",
+  "#3b6d11",
+  "#854f0b",
+];
 
 export const useMembersStore = defineStore("members", () => {
   const defaultMembers = [
-    { userId: "fan", name: "Fan (You)", email: "fan@example.com", role: "owner", state: "online", avatarColor: "#534ab7" },
-    { userId: "james", name: "James L.", email: "james@example.com", role: "admin", state: "online", avatarColor: "#0f6e56" },
-    { userId: "sara", name: "Sara R.", email: "sara@example.com", role: "member", state: "offline", avatarColor: "#993c1d" },
-    { userId: "mike", name: "Mike K.", email: "mike@example.com", role: "member", state: "offline", avatarColor: "#185fa5" },
+    {
+      userId: "fan",
+      name: "Fan (You)",
+      email: "fan@example.com",
+      role: "owner",
+      state: "online",
+      avatarColor: "#534ab7",
+    },
+    {
+      userId: "james",
+      name: "James L.",
+      email: "james@example.com",
+      role: "admin",
+      state: "online",
+      avatarColor: "#0f6e56",
+    },
+    {
+      userId: "sara",
+      name: "Sara R.",
+      email: "sara@example.com",
+      role: "member",
+      state: "offline",
+      avatarColor: "#993c1d",
+    },
+    {
+      userId: "mike",
+      name: "Mike K.",
+      email: "mike@example.com",
+      role: "member",
+      state: "offline",
+      avatarColor: "#185fa5",
+    },
   ];
 
   const list = ref(loadPersisted("planify:members", defaultMembers));
@@ -18,7 +53,9 @@ export const useMembersStore = defineStore("members", () => {
   const loading = ref(false);
   const error = ref(null);
 
-  const admins = computed(() => list.value.filter((member) => ["owner", "admin"].includes(member.role)));
+  const admins = computed(() =>
+    list.value.filter((member) => ["owner", "admin"].includes(member.role)),
+  );
 
   function avatarColor(userId) {
     const n = userId.charCodeAt(0) + userId.charCodeAt(userId.length - 1);
@@ -36,14 +73,23 @@ export const useMembersStore = defineStore("members", () => {
       error.value = "Email is required.";
       return { success: false };
     }
-    if (list.value.some((member) => member.email.toLowerCase() === normalizedEmail)) {
+    if (
+      list.value.some(
+        (member) => member.email.toLowerCase() === normalizedEmail,
+      )
+    ) {
       error.value = "This email is already a member of this workspace.";
       return { success: false };
     }
-    const userId = normalizedEmail.split("@")[0].replace(/[^a-z0-9]/gi, "-") || crypto.randomUUID();
+    const userId =
+      normalizedEmail.split("@")[0].replace(/[^a-z0-9]/gi, "-") ||
+      crypto.randomUUID();
     const member = {
       userId,
-      name: normalizedEmail.split("@")[0].replace(/[._-]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+      name: normalizedEmail
+        .split("@")[0]
+        .replace(/[._-]+/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase()),
       email: normalizedEmail,
       role,
       state: "offline",

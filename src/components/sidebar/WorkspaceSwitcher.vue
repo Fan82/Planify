@@ -1,8 +1,8 @@
 <template>
   <div class="workspace-switcher">
-    <div class="ws-badge">AC</div>
+    <div class="ws-badge">MW</div>
     <div>
-      <strong>Acme Corp</strong>
+      <strong>My Workspace</strong>
       <span>Starter · 4 members</span>
     </div>
     <span class="ws-chevron">⌄</span>
