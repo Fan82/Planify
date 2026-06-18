@@ -13,7 +13,7 @@ defineEmits(["close"]);
       <header>
         <h2>{{ title }}</h2>
         <button type="button" class="icon-button" aria-label="Close" @click="$emit('close')">
-          x
+          ×
         </button>
       </header>
       <slot />

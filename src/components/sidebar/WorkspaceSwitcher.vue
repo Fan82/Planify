@@ -1,10 +1,9 @@
 <template>
   <div class="workspace-switcher">
-    <div class="ws-badge">MW</div>
+    <div class="ws-badge">P</div>
     <div>
-      <strong>My Workspace</strong>
-      <span>Starter · 4 members</span>
+      <strong>Fan's <br />Workspace</strong>
+      <span>4 members</span>
     </div>
-    <span class="ws-chevron">⌄</span>
   </div>
 </template>

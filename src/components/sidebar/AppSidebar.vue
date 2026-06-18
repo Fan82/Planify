@@ -3,12 +3,15 @@ import MemberList from "./MemberList.vue";
 import ProjectList from "./ProjectList.vue";
 import WorkspaceSwitcher from "./WorkspaceSwitcher.vue";
 
-const navItems = [
-  { to: "/board", label: "Board", count: 9 },
-  { to: "/my-tasks", label: "Today", count: 3 },
-  { to: "/calendar", label: "Calendar" },
-  { to: "/overview", label: "Overview" },
-  { to: "/settings", label: "Settings" },
+const primaryNavItems = [
+  { to: "/overview", label: "Overview", icon: "◫" },
+  { to: "/board", label: "Board", icon: "▦" },
+  { to: "/my-tasks", label: "My tasks", icon: "✓" },
+  { to: "/calendar", label: "Calendar", icon: "◷" },
+];
+
+const utilityNavItems = [
+  { to: "/settings", label: "Settings", icon: "⚙" },
 ];
 </script>
 
@@ -16,12 +19,19 @@ const navItems = [
   <aside class="app-sidebar">
     <WorkspaceSwitcher />
     <nav class="sidebar-nav" aria-label="Main navigation">
-      <RouterLink v-for="item in navItems" :key="item.to" :to="item.to">
+      <div class="sidebar-label">Workspace</div>
+      <RouterLink v-for="item in primaryNavItems" :key="item.to" :to="item.to">
+        <span class="nav-icon" aria-hidden="true">{{ item.icon }}</span>
         <span>{{ item.label }}</span>
-        <span v-if="item.count" class="nav-count">{{ item.count }}</span>
       </RouterLink>
     </nav>
     <ProjectList />
     <MemberList />
+    <nav class="sidebar-nav sidebar-utility" aria-label="Workspace tools">
+      <RouterLink v-for="item in utilityNavItems" :key="item.to" :to="item.to">
+        <span class="nav-icon" aria-hidden="true">{{ item.icon }}</span>
+        <span>{{ item.label }}</span>
+      </RouterLink>
+    </nav>
   </aside>
 </template>

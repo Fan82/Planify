@@ -35,7 +35,7 @@ export const useProjectsStore = defineStore("projects", () => {
   ];
 
   const list = ref(loadPersisted("planify:projects", defaultProjects));
-  const activeProjectId = ref(loadPersisted("planify:active-project-id", "all"));
+  const activeProjectId = ref(loadPersisted("planify:active-project-id", "project-product"));
 
   if (activeProjectId.value !== "all" && !list.value.some((project) => project.id === activeProjectId.value)) {
     activeProjectId.value = "all";

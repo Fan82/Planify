@@ -24,15 +24,7 @@ const taskCounts = computed(() =>
 
 function selectProject(projectId) {
   projects.selectProject(projectId);
-
-  if (projectId === "all") {
-    if (!tasks.selectedTask) tasks.selectTask(tasks.tasks[0]?.id ?? null);
-    return;
-  }
-
-  if (tasks.selectedTask?.projectId === projectId) return;
-  const firstProjectTask = tasks.tasks.find((task) => task.projectId === projectId);
-  tasks.selectTask(firstProjectTask?.id ?? null);
+  tasks.selectTask(null);
 }
 
 function startCreate() {
@@ -57,7 +49,7 @@ function submitProject() {
 
 <template>
   <div class="sidebar-section projects-section">
-    <div class="sidebar-label">Show</div>
+    <div class="sidebar-label">Projects</div>
     <button
       class="sidebar-item"
       :class="{ active: activeProjectId === 'all' }"
@@ -65,7 +57,7 @@ function submitProject() {
       @click="selectProject('all')"
     >
       <span class="project-dot all"></span>
-      <span>All tasks</span>
+      <span>All projects</span>
       <span class="nav-count">{{ allTaskCount }}</span>
     </button>
     <button

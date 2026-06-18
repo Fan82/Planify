@@ -137,14 +137,9 @@ export const useTasksStore = defineStore("tasks", () => {
   ];
 
   const tasks = ref(loadPersisted("planify:tasks", defaultTasks));
-  const selectedTaskId = ref(loadPersisted("planify:selected-task-id", "task-1"));
-
-  if (!tasks.value.some((task) => task.id === selectedTaskId.value)) {
-    selectedTaskId.value = tasks.value[0]?.id ?? null;
-  }
+  const selectedTaskId = ref(null);
 
   persistRef("planify:tasks", tasks);
-  persistRef("planify:selected-task-id", selectedTaskId);
   const selectedTask = computed(() =>
     tasks.value.find((task) => task.id === selectedTaskId.value),
   );

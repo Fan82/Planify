@@ -10,7 +10,7 @@ const props = defineProps({
   search: { type: String, default: "" },
 });
 
-const emit = defineEmits(["add-task"]);
+const emit = defineEmits(["add-task", "open-task"]);
 
 const tasks = useTasksStore();
 const projects = useProjectsStore();
@@ -53,6 +53,14 @@ function handleDrop(status) {
   tasks.moveTask(draggedTaskId.value, status);
   draggedTaskId.value = null;
 }
+
+function handleDragStart(taskId) {
+  draggedTaskId.value = taskId;
+}
+
+function handleDragEnd() {
+  draggedTaskId.value = null;
+}
 </script>
 
 <template>
@@ -61,9 +69,11 @@ function handleDrop(status) {
       v-for="column in columns"
       :key="column.id"
       :column="column"
-      @open-task="tasks.selectTask"
+      :dragged-task-id="draggedTaskId"
+      @open-task="emit('open-task', $event)"
       @add-task="emit('add-task', $event)"
-      @drag-start="draggedTaskId = $event"
+      @drag-start="handleDragStart"
+      @drag-end="handleDragEnd"
       @move-task="handleDrop"
     />
   </div>
