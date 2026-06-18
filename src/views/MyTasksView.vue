@@ -124,7 +124,7 @@ function completeTask(taskId) {
         <button class="btn btn-secondary" type="button" @click="completeTask(recommendedTask.id)">Done</button>
         <button class="btn btn-ghost" type="button" @click="openTask(recommendedTask.id)">Open on board</button>
       </div>
-      <RouterLink v-else class="btn btn-primary" to="/board">Create Goal</RouterLink>
+      <RouterLink v-else class="btn btn-primary create-goal-btn" to="/board">Create Goal</RouterLink>
     </section>
 
     <div class="focus-stats" aria-label="Today focus summary">

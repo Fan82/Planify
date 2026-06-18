@@ -1,6 +1,7 @@
 <script setup>
 import { reactive, ref } from "vue";
 import MemberAvatar from "@/components/members/MemberAvatar.vue";
+import MemberColorPicker from "@/components/members/MemberColorPicker.vue";
 import RoleBadge from "@/components/members/RoleBadge.vue";
 import ToastNotification from "@/components/ui/ToastNotification.vue";
 import { useMembersStore } from "@/stores/members";
@@ -10,6 +11,7 @@ const toast = ref("");
 const inviteForm = reactive({
   email: "",
   role: "member",
+  color: members.avatarColors[0],
 });
 
 function notify(message) {
@@ -20,13 +22,14 @@ function notify(message) {
 }
 
 async function inviteMember() {
-  const result = await members.invite(inviteForm.email, inviteForm.role);
+  const result = await members.invite(inviteForm.email, inviteForm.role, inviteForm.color);
   if (!result.success) {
     notify(members.error || "Unable to invite member");
     return;
   }
   inviteForm.email = "";
   inviteForm.role = "member";
+  inviteForm.color = members.avatarColors[0];
   notify("Member invited");
 }
 
@@ -68,6 +71,7 @@ async function removeMember(member) {
               <option value="member">member</option>
             </select>
           </label>
+          <MemberColorPicker v-model="inviteForm.color" :colors="members.avatarColors" />
           <button class="btn btn-primary" type="submit">Invite</button>
         </form>
       </section>
@@ -80,7 +84,7 @@ async function removeMember(member) {
         <div class="member-table interactive">
           <div v-for="member in members.list" :key="member.userId">
             <span class="member-cell">
-              <MemberAvatar :name="member.name" />
+              <MemberAvatar :name="member.name" :color="member.avatarColor" />
               <strong>{{ member.name }}</strong>
             </span>
             <span>{{ member.email }}</span>

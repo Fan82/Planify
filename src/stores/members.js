@@ -3,12 +3,12 @@ import { computed, ref } from "vue";
 import { loadPersisted, persistRef } from "@/utils/persistence";
 
 const AVATAR_COLORS = [
-  "#FFAE00",
-  "#0f6e56",
-  "#993c1d",
-  "#185fa5",
-  "#3b6d11",
-  "#854f0b",
+  "#6f68d9",
+  "#1d9e75",
+  "#d65d7a",
+  "#3b82f6",
+  "#ef9f27",
+  "#8b5cf6",
 ];
 
 export const useMembersStore = defineStore("members", () => {
@@ -66,7 +66,7 @@ export const useMembersStore = defineStore("members", () => {
     return list.value;
   }
 
-  async function invite(email, role = "member") {
+  async function invite(email, role = "member", color = "") {
     error.value = null;
     const normalizedEmail = email.trim().toLowerCase();
     if (!normalizedEmail) {
@@ -93,7 +93,7 @@ export const useMembersStore = defineStore("members", () => {
       email: normalizedEmail,
       role,
       state: "offline",
-      avatarColor: avatarColor(userId),
+      avatarColor: AVATAR_COLORS.includes(color) ? color : avatarColor(userId),
     };
     list.value.push(member);
     return { success: true, member };
@@ -120,6 +120,7 @@ export const useMembersStore = defineStore("members", () => {
     admins,
     loading,
     error,
+    avatarColors: AVATAR_COLORS,
     avatarColor,
     fetch,
     invite,

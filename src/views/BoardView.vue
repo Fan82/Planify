@@ -144,7 +144,7 @@ function resetBoardFilters() {
             </div>
           </div>
         </details>
-        <BaseButton class="tb-btn primary" @click="openCreateGoal">Create Goal</BaseButton>
+        <BaseButton class="tb-btn primary create-goal-btn" @click="openCreateGoal">Create Goal</BaseButton>
       </div>
     </header>
 
@@ -202,7 +202,13 @@ function resetBoardFilters() {
         </label>
         <div class="form-grid">
           <BaseInput id="task-assignee" v-model="form.assignee" label="Owner" />
-          <BaseInput id="task-due" v-model="form.dueDate" label="Target date" type="date" />
+          <BaseInput
+            id="task-due"
+            v-model="form.dueDate"
+            label="Target date"
+            type="text"
+            placeholder="YYYY-MM-DD"
+          />
           <BaseSelect
             v-if="form.mode === 'task'"
             id="task-status"

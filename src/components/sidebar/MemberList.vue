@@ -10,7 +10,7 @@ const members = useMembersStore();
     <div class="sidebar-label">Team</div>
     <div class="member-list">
       <div v-for="member in members.list" :key="member.userId" class="member-row">
-        <MemberAvatar :name="member.name" />
+        <MemberAvatar :name="member.name" :color="member.avatarColor" />
         <span>{{ member.name }}</span>
         <i :class="member.state"></i>
       </div>

@@ -4,6 +4,7 @@ import { computed } from "vue";
 const props = defineProps({
   name: { type: String, required: true },
   single: { type: Boolean, default: false },
+  color: { type: String, default: "" },
 });
 
 const initials = computed(() => {
@@ -15,7 +16,7 @@ const initials = computed(() => {
 </script>
 
 <template>
-  <span class="avatar" :title="name">
+  <span class="avatar" :title="name" :style="color ? { background: color } : undefined">
     {{ initials }}
   </span>
 </template>

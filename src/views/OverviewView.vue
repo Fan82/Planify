@@ -42,7 +42,7 @@ const stats = computed(() => [
   { label: "Active tasks", value: activeTasks.value.length },
   { label: "In progress", value: inProgressTasks.value.length },
   { label: "Needs review", value: reviewTasks.value.length },
-  { label: "Completion", value: `${completionRate.value}%` },
+  { label: "Completed", value: tasks.completedTasks.length },
 ]);
 
 const attentionTasks = computed(() =>
@@ -95,7 +95,7 @@ function openTask(taskId) {
         <p>Workspace</p>
         <h1>Execution Overview</h1>
       </div>
-      <RouterLink class="btn btn-primary" to="/board">Create Goal</RouterLink>
+      <RouterLink class="btn btn-primary create-goal-btn" to="/board">Create Goal</RouterLink>
     </header>
 
     <section class="overview-hero" aria-label="Execution health">
@@ -104,8 +104,20 @@ function openTask(taskId) {
         <h2>{{ activeTasks.length }} active tasks across {{ projects.list.length }} projects</h2>
       </div>
       <div class="overview-hero-score">
-        <span>Completion</span>
-        <strong>{{ completionRate }}%</strong>
+        <div class="overview-completion-head">
+          <span>Completion</span>
+          <strong>{{ completionRate }}%</strong>
+        </div>
+        <div
+          class="overview-progress"
+          role="progressbar"
+          aria-label="Task completion"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          :aria-valuenow="completionRate"
+        >
+          <span :style="{ width: `${completionRate}%` }"></span>
+        </div>
       </div>
     </section>
 

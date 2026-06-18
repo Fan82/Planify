@@ -106,7 +106,13 @@ function deleteCurrentTask() {
             </label>
             <label class="field" for="detail-date">
               <span>Due date</span>
-              <input id="detail-date" v-model="form.dueDate" type="date" />
+              <input
+                id="detail-date"
+                v-model="form.dueDate"
+                type="text"
+                inputmode="numeric"
+                placeholder="YYYY-MM-DD"
+              />
             </label>
             <label class="field" for="detail-assignee">
               <span>Assignee</span>
