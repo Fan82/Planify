@@ -14,7 +14,7 @@ const form = reactive({
   description: "",
   status: "todo",
   priority: "medium",
-  projectId: "project-product",
+  projectId: "",
   dueDate: "",
   assignee: "",
   tag: "",

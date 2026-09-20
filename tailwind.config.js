@@ -6,16 +6,16 @@ export default {
       colors: {
         // Design token — Plan Task B2B
         bg: {
-          DEFAULT: "#0f0f13",
-          surface: "#16161d",
-          surface2: "#1c1c26",
+          DEFAULT: "#ffffff",
+          surface: "#ffffff",
+          surface2: "#f4f4f8",
         },
         brand: {
           DEFAULT: "#7c6fcd",
           dark: "#534ab7",
         },
         border: {
-          DEFAULT: "#2a2a38",
+          DEFAULT: "#e4e4ec",
         },
       },
       fontFamily: {

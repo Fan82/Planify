@@ -20,7 +20,7 @@ const search = ref("");
 const activeProject = computed(() =>
   projects.activeProjectId === "all"
     ? "All tasks"
-    : projects.activeProject?.name || "Q3 Product Launch",
+    : projects.activeProject?.name || "Untitled Project",
 );
 
 const visibleScopeTasks = computed(() =>
@@ -41,7 +41,7 @@ const form = reactive({
   dueDate: "",
   priority: "medium",
   status: "todo",
-  projectId: "project-product",
+  projectId: "",
   tag: "General",
 });
 
@@ -71,7 +71,7 @@ function resetForm(mode = "goal", status = "todo") {
     dueDate: "",
     priority: "medium",
     status,
-    projectId: projects.activeProjectId === "all" ? "project-product" : projects.activeProjectId,
+    projectId: projects.activeProjectId === "all" ? (projects.list[0]?.id ?? "") : projects.activeProjectId,
     tag: mode === "goal" ? "Goal" : "General",
   });
 }

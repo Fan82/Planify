@@ -21,30 +21,6 @@ export const useMembersStore = defineStore("members", () => {
       state: "online",
       avatarColor: "#534ab7",
     },
-    {
-      userId: "james",
-      name: "James L.",
-      email: "james@example.com",
-      role: "admin",
-      state: "online",
-      avatarColor: "#0f6e56",
-    },
-    {
-      userId: "sara",
-      name: "Sara R.",
-      email: "sara@example.com",
-      role: "member",
-      state: "offline",
-      avatarColor: "#993c1d",
-    },
-    {
-      userId: "mike",
-      name: "Mike K.",
-      email: "mike@example.com",
-      role: "member",
-      state: "offline",
-      avatarColor: "#185fa5",
-    },
   ];
 
   const list = ref(loadPersisted("planify:members", defaultMembers));
