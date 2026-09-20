@@ -22,7 +22,7 @@ export const PRIORITIES = [
   { id: "low", label: "Low" },
 ];
 
-export const CURRENT_USER = "Fan (You)";
+export const CURRENT_USER = "You";
 
 export const useTasksStore = defineStore("tasks", () => {
   const defaultTasks = [];

@@ -8,7 +8,7 @@ import BaseModal from "@/components/ui/BaseModal.vue";
 import BaseSelect from "@/components/ui/BaseSelect.vue";
 import ToastNotification from "@/components/ui/ToastNotification.vue";
 import { useProjectsStore } from "@/stores/projects";
-import { PRIORITIES, TASK_STATUSES, useTasksStore } from "@/stores/tasks";
+import { CURRENT_USER, PRIORITIES, TASK_STATUSES, useTasksStore } from "@/stores/tasks";
 
 const tasks = useTasksStore();
 const projects = useProjectsStore();
@@ -37,7 +37,7 @@ const form = reactive({
   mode: "goal",
   title: "",
   description: "",
-  assignee: "Fan (You)",
+  assignee: CURRENT_USER,
   dueDate: "",
   priority: "medium",
   status: "todo",
@@ -67,7 +67,7 @@ function resetForm(mode = "goal", status = "todo") {
     mode,
     title: "",
     description: "",
-    assignee: "Fan (You)",
+    assignee: CURRENT_USER,
     dueDate: "",
     priority: "medium",
     status,
@@ -127,14 +127,8 @@ function resetBoardFilters() {
               <input id="board-search" v-model="search" class="toolbar-search" placeholder="Search tasks" />
             </label>
             <div class="board-filter-options" aria-label="Task filters">
-              <button
-                v-for="filter in filters"
-                :key="filter.id"
-                type="button"
-                class="filter-chip"
-                :class="{ active: activeFilter === filter.id }"
-                @click="activeFilter = filter.id"
-              >
+              <button v-for="filter in filters" :key="filter.id" type="button" class="filter-chip"
+                :class="{ active: activeFilter === filter.id }" @click="activeFilter = filter.id">
                 {{ filter.label }}
               </button>
             </div>
@@ -157,42 +151,25 @@ function resetBoardFilters() {
     </section>
 
     <div class="board-workspace">
-      <KanbanBoard
-        :filter="activeFilter"
-        :search="search"
-        @add-task="openCreate"
-        @open-task="tasks.selectTask"
-      />
+      <KanbanBoard :filter="activeFilter" :search="search" @add-task="openCreate" @open-task="tasks.selectTask" />
       <TaskDetailPanel v-if="tasks.selectedTask" />
     </div>
 
     <BaseModal :open="showCreate" :title="modalTitle" @close="showCreate = false">
       <form class="task-form" @submit.prevent="submitTask">
         <div class="mode-switch" aria-label="Creation mode">
-          <button
-            class="mode-option"
-            :class="{ active: form.mode === 'goal' }"
-            type="button"
-            @click="resetForm('goal')"
-          >
+          <button class="mode-option" :class="{ active: form.mode === 'goal' }" type="button"
+            @click="resetForm('goal')">
             Goal plan
           </button>
-          <button
-            class="mode-option"
-            :class="{ active: form.mode === 'task' }"
-            type="button"
-            @click="resetForm('task', form.status)"
-          >
+          <button class="mode-option" :class="{ active: form.mode === 'task' }" type="button"
+            @click="resetForm('task', form.status)">
             Single task
           </button>
         </div>
 
-        <BaseInput
-          id="task-title"
-          v-model="form.title"
-          :label="form.mode === 'goal' ? 'Goal' : 'Task title'"
-          :placeholder="form.mode === 'goal' ? 'Launch the new onboarding flow' : ''"
-        />
+        <BaseInput id="task-title" v-model="form.title" :label="form.mode === 'goal' ? 'Goal' : 'Task title'"
+          :placeholder="form.mode === 'goal' ? 'Launch the new onboarding flow' : ''" />
         <p v-if="form.mode === 'goal'" class="helper-copy">
           Planify will turn this goal into success criteria, first milestone, next action, and review tasks.
         </p>
@@ -202,20 +179,9 @@ function resetBoardFilters() {
         </label>
         <div class="form-grid">
           <BaseInput id="task-assignee" v-model="form.assignee" label="Owner" />
-          <BaseInput
-            id="task-due"
-            v-model="form.dueDate"
-            label="Target date"
-            type="text"
-            placeholder="YYYY-MM-DD"
-          />
-          <BaseSelect
-            v-if="form.mode === 'task'"
-            id="task-status"
-            v-model="form.status"
-            label="Status"
-            :options="TASK_STATUSES"
-          />
+          <BaseInput id="task-due" v-model="form.dueDate" label="Target date" type="text" placeholder="YYYY-MM-DD" />
+          <BaseSelect v-if="form.mode === 'task'" id="task-status" v-model="form.status" label="Status"
+            :options="TASK_STATUSES" />
           <BaseInput v-if="form.mode === 'task'" id="task-tag" v-model="form.tag" label="Tag" />
           <BaseSelect id="task-priority" v-model="form.priority" label="Priority" :options="PRIORITIES" />
           <BaseSelect id="task-project" v-model="form.projectId" label="Project" :options="projects.list" />

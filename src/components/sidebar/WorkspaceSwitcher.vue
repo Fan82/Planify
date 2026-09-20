@@ -8,7 +8,7 @@ const members = useMembersStore();
   <div class="workspace-switcher">
     <div class="ws-badge">P</div>
     <div>
-      <strong>Fan's <br />Workspace</strong>
+      <strong>My <br />Workspace</strong>
       <span>{{ members.list.length }} member{{ members.list.length === 1 ? "" : "s" }}</span>
     </div>
   </div>

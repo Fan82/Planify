@@ -623,6 +623,11 @@ a {
   color: var(--muted);
 }
 
+.btn.btn-ghost:hover {
+  background: rgba(124, 111, 205, 0.1);
+  color: var(--text)
+}
+
 .project-summary {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
