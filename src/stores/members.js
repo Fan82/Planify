@@ -12,16 +12,7 @@ const AVATAR_COLORS = [
 ];
 
 export const useMembersStore = defineStore("members", () => {
-  const defaultMembers = [
-    {
-      userId: "fan",
-      name: "Fan (You)",
-      email: "fan@example.com",
-      role: "owner",
-      state: "online",
-      avatarColor: "#534ab7",
-    },
-  ];
+  const defaultMembers = [];
 
   const list = ref(loadPersisted("planify:members", defaultMembers));
   persistRef("planify:members", list);

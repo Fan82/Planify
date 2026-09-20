@@ -456,7 +456,7 @@ a {
   margin-top: 16px;
 }
 
-.member-table.interactive > div {
+.member-table.interactive>div {
   grid-template-columns: minmax(160px, 0.8fr) minmax(180px, 1fr) auto minmax(190px, auto);
 }
 
@@ -581,7 +581,7 @@ a {
 .tb-btn:hover,
 .btn:hover {
   border-color: var(--accent);
-  color: var(--text);
+  color: #fff;
 }
 
 .tb-btn.primary,
@@ -1268,7 +1268,7 @@ h1 {
 .stat-card,
 .panel,
 .timeline article,
-.member-table > div,
+.member-table>div,
 .compact-list div {
   border: 0.5px solid var(--border);
   border-radius: 10px;
@@ -1287,6 +1287,7 @@ h1 {
 .stat-card strong {
   color: var(--text);
   font-size: 24px;
+  margin-left: 8px;
 }
 
 .task-list,
@@ -1302,7 +1303,7 @@ h1 {
 }
 
 .timeline article,
-.member-table > div {
+.member-table>div {
   display: grid;
   grid-template-columns: 110px 1fr auto;
   align-items: center;
@@ -2110,8 +2111,8 @@ h1 {
   .form-grid,
   .form-grid.compact,
   .timeline article,
-  .member-table > div,
-  .member-table.interactive > div {
+  .member-table>div,
+  .member-table.interactive>div {
     grid-template-columns: 1fr;
   }
 
@@ -2614,7 +2615,7 @@ h1 {
   font-weight: 650;
 }
 
-.col-header > span:last-child {
+.col-header>span:last-child {
   background: transparent;
   color: var(--muted);
   font-size: 13px;
@@ -2776,11 +2777,11 @@ h1 {
   box-shadow: 0 32px 90px rgba(15, 15, 30, 0.2);
 }
 
-.modal > header {
+.modal>header {
   margin-bottom: 28px;
 }
 
-.modal > header h2 {
+.modal>header h2 {
   font-size: 32px;
   font-weight: 700;
 }
@@ -3051,11 +3052,11 @@ h1 {
     padding: 22px 18px;
   }
 
-  .modal > header {
+  .modal>header {
     margin-bottom: 20px;
   }
 
-  .modal > header h2 {
+  .modal>header h2 {
     font-size: 24px;
   }
 
