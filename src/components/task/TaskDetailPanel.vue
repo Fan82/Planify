@@ -1,6 +1,7 @@
 <script setup>
 import { computed, reactive, watch } from "vue";
 import MemberAvatar from "@/components/members/MemberAvatar.vue";
+import ProjectSelect from "@/components/ui/ProjectSelect.vue";
 import { useProjectsStore } from "@/stores/projects";
 import { PRIORITIES, TASK_STATUSES, useTasksStore } from "@/stores/tasks";
 import TaskActivityLog from "./TaskActivityLog.vue";
@@ -96,23 +97,10 @@ function deleteCurrentTask() {
                 </option>
               </select>
             </label>
-            <label class="field" for="detail-project">
-              <span>Project</span>
-              <select id="detail-project" v-model="form.projectId">
-                <option v-for="project in projects.list" :key="project.id" :value="project.id">
-                  {{ project.name }}
-                </option>
-              </select>
-            </label>
+            <ProjectSelect id="detail-project" v-model="form.projectId" />
             <label class="field" for="detail-date">
               <span>Due date</span>
-              <input
-                id="detail-date"
-                v-model="form.dueDate"
-                type="text"
-                inputmode="numeric"
-                placeholder="YYYY-MM-DD"
-              />
+              <input id="detail-date" v-model="form.dueDate" type="date" />
             </label>
             <label class="field" for="detail-assignee">
               <span>Assignee</span>

@@ -6,6 +6,7 @@ import BaseButton from "@/components/ui/BaseButton.vue";
 import BaseInput from "@/components/ui/BaseInput.vue";
 import BaseModal from "@/components/ui/BaseModal.vue";
 import BaseSelect from "@/components/ui/BaseSelect.vue";
+import ProjectSelect from "@/components/ui/ProjectSelect.vue";
 import ToastNotification from "@/components/ui/ToastNotification.vue";
 import { useProjectsStore } from "@/stores/projects";
 import { CURRENT_USER, PRIORITIES, TASK_STATUSES, useTasksStore } from "@/stores/tasks";
@@ -179,12 +180,12 @@ function resetBoardFilters() {
         </label>
         <div class="form-grid">
           <BaseInput id="task-assignee" v-model="form.assignee" label="Owner" />
-          <BaseInput id="task-due" v-model="form.dueDate" label="Target date" type="text" placeholder="YYYY-MM-DD" />
+          <BaseInput id="task-due" v-model="form.dueDate" label="Target date" type="date" />
           <BaseSelect v-if="form.mode === 'task'" id="task-status" v-model="form.status" label="Status"
             :options="TASK_STATUSES" />
           <BaseInput v-if="form.mode === 'task'" id="task-tag" v-model="form.tag" label="Tag" />
           <BaseSelect id="task-priority" v-model="form.priority" label="Priority" :options="PRIORITIES" />
-          <BaseSelect id="task-project" v-model="form.projectId" label="Project" :options="projects.list" />
+          <ProjectSelect id="task-project" v-model="form.projectId" />
         </div>
         <div class="form-actions">
           <BaseButton variant="ghost" @click="showCreate = false">Cancel</BaseButton>

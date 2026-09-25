@@ -472,6 +472,8 @@ function openTask(taskId) {
   .cal-wrap {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    -webkit-mask-image: linear-gradient(to right, black calc(100% - 24px), transparent);
+    mask-image: linear-gradient(to right, black calc(100% - 24px), transparent);
   }
 
   .dow-row,
